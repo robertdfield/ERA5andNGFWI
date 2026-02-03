@@ -14,11 +14,12 @@ function main()
 %}
 
     % where to write the table
-    outputRoot = '/Users/rfield1/data/observations/ERA5Land/reanalysis-era5-land-timeseries/';
+    machineRoot = ['/autofs/brewer/rfield1/storage/observations/'];
+    outputRoot = [machineRoot '/ERA5Land/reanalysis-era5-land-timeseries/'];
 
     % This is the 'Land-sea' ERA5 mask under the 'Invariant' full gridded ERA5Land fields here:
     %https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land?tab=download
-    landSeaMaskFN = '/Users/rfield1/data/observations/ERA5Land/reanalysis-era5-land/LandSeaMask.nc';
+    landSeaMaskFN = [machineRoot 'ERA5Land/reanalysis-era5-land/LandSeaMask.nc'];
 
     % a descriptive name and the grid particulars
     regionName = 'IberianPeninsula';
