@@ -8,7 +8,6 @@ function main()
         by the python scripts from the CFS (which is done in another
         script) to do 'next generation' fire weather index calculations
     By robert.field@columbia.edu
-
 %}
     clear all;
 
