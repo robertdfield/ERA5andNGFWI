@@ -23,7 +23,8 @@ import sys
 
 
 # main local computer location. Change this according to where you'd like your output on your machine
-machineRoot = "/Users/rfield1/data/observations/"
+#machineRoot = "/Users/rfield1/data/observations/"
+machineRoot = "/autofs/brewer/rfield1/storage/observations/"
 
 # name of dataset
 #dataset = "reanalysis-era5-land-timeseries"
