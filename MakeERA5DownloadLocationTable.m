@@ -13,8 +13,11 @@ function main()
     https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land-timeseries?tab=overview
 %}
 
+    % for running on different machines
+    machineRoot = '/Users/rfield1/data/observations/';
+   % machineRoot = ['/autofs/brewer/rfield1/storage/observations/'];
+
     % where to write the table
-    machineRoot = ['/autofs/brewer/rfield1/storage/observations/'];
     outputRoot = [machineRoot '/ERA5Land/reanalysis-era5-land-timeseries/'];
 
     % This is the 'Land-sea' ERA5 mask under the 'Invariant' full gridded ERA5Land fields here:
@@ -52,6 +55,7 @@ function main()
     for currLat = mapLatLim(1):gridSpacingDegrees:mapLatLim(2)
         for currLon = mapLonLim(1):gridSpacingDegrees:mapLonLim(2)
 
+            currLonInTheirCoords = currLon;
             if (currLon<0) 
                 currLonInTheirCoords = 360+currLon; % barf
             end
@@ -72,7 +76,9 @@ function main()
             end
         end
     end
-
+    close all;
+    figure('Visible','on')
+    scatter(gridPointLons,gridPointLats,'filled');
     % write the table to a csv file
     outFN = [outputDir regionName '.gridSpacingDegrees.' num2str(gridSpacingDegrees) '.DownloadCoords.csv'];
     outTable = [gridPointIDs num2cell(gridPointLats) num2cell(gridPointLons) num2cell(gridPointAreas)];
