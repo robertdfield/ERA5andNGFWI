@@ -18,9 +18,11 @@ function main()
     end
     parpool(nProc)
     pctRunOnAll warning('off','all');
-    
+  
     % main location to process data
-    machineRoot = '/Users/rfield1/data/observations/';
+    %machineRoot = '/Users/rfield1/data/observations/';
+    machineRoot = ['/autofs/brewer/rfield1/storage/observations/'];
+
 
     % name of dataset...not using this?
     dataset = 'reanalysis-era5-land-timeseries';
@@ -39,6 +41,7 @@ function main()
     inputRootDir = [machineRoot '/ERA5Land/' dataset '/'];
     coordFN = [outputDir  '/' regionName '.gridSpacingDegrees.0.25.DownloadCoords.csv'];
 
+    minZipFileSizeInBytes = 20000000; % sometimes the downloads didn't work?
     coordTable = readtable(coordFN);
     nCoords = size(coordTable,1);
 
@@ -46,7 +49,7 @@ function main()
     startDate = datenum(1980,1,1);
     endDate = datenum(2025,11,30);
 
-    parfor currCoordI = 1:nCoords % parforable
+    for currCoordI = 1:nCoords % parforable
         currID = char(coordTable{currCoordI,'ID'});
         stnLat = coordTable{currCoordI,'Lat'}; 	
         stnLon = coordTable{currCoordI,'Lon'};
@@ -56,8 +59,12 @@ function main()
         % name of file in new format
         outputFN = [currInputDir currID '.HourlyWxInput.'  datestr(startDate,'yyyymmdd') '.' datestr(endDate,'yyyymmdd') '.ERA5LAND.csv'];
         zipFileName = [currInputDir currID '.zip'];
+        zipFileInfo = dir(zipFileName);
+        if (zipFileInfo.bytes < 20000000)
+            %delete(zipFileInfo);
+        end
         
-        if (~exist(outputFN,'file') & exist(zipFileName,'file'))
+        if (  ~exist(outputFN,'file') & exist(zipFileName,'file'))
             try
                 % unzip, which know in advance has 5 files
                 cmdStr = ['unzip -o '  zipFileName ' -d ' currInputDir];
@@ -85,7 +92,7 @@ function main()
 
                 tempTS = currTable{goodDateI,'t2m'};                
                 dewpointTS = currTable{goodDateI,'d2m'};
-                delete(currCSVPath);
+                %delete(currCSVPath);
 
                 currVarGroup = 'sfc-pressure-precipitation';
                 dirContents = dir([currInputDir '*' currVarGroup '*.csv']);
@@ -93,7 +100,7 @@ function main()
                 currTable = readtable(currCSVPath);
                 precTS = currTable{goodDateI,'tp'};
                 %surfPresTS = currTable{goodDateI,'sp'};
-                delete(currCSVPath);
+                %delete(currCSVPath);
 
                 currVarGroup = 'sfc-wind';
                 dirContents = dir([currInputDir '*' currVarGroup '*.csv']);
@@ -101,7 +108,7 @@ function main()
                 currTable = readtable(currCSVPath);
                 uwndTS = currTable{goodDateI,'u10'};
                 vwndTS = currTable{goodDateI,'v10'};        
-                delete(currCSVPath);
+                %delete(currCSVPath);
 
                 %
                 % make use of this someday. For now processing for the sake
@@ -112,7 +119,7 @@ function main()
                 currCSVPath = [dirContents.folder '/' dirContents.name];
                 currTable = readtable(currCSVPath);
                 snowTS = currTable{goodDateI,'snowc'};
-                delete(currCSVPath);
+                %delete(currCSVPath);
 
                 currVarGroup = 'sfc-soil-water';
                 dirContents = dir([currInputDir '*' currVarGroup '*.csv']);
@@ -122,14 +129,14 @@ function main()
                 soilWater2 = currTable{goodDateI,'swvl2'};
                 soilWater3 = currTable{goodDateI,'swvl2'};
                 soilWater4 = currTable{goodDateI,'swvl2'};
-                delete(currCSVPath);
+                %delete(currCSVPath);
 
                 currVarGroup = 'sfc-radiation-heat';
                 dirContents = dir([currInputDir '*' currVarGroup '*.csv']);
                 currCSVPath = [dirContents.folder '/' dirContents.name];
                 currTable = readtable(currCSVPath);
                 downwardSolarTS = currTable{goodDateI,'ssrd'};
-                delete(currCSVPath);
+                %delete(currCSVPath);
                 
                 tVec = NaN*ones(nObs,1);
                 rhSimpleVec = NaN*ones(nObs,1);

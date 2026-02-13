@@ -14,8 +14,8 @@ function main()
 %}
 
     % for running on different machines
-    machineRoot = '/Users/rfield1/data/observations/';
-   % machineRoot = ['/autofs/brewer/rfield1/storage/observations/'];
+    %machineRoot = '/Users/rfield1/data/observations/';
+    machineRoot = ['/autofs/brewer/rfield1/storage/observations/'];
 
     % where to write the table
     outputRoot = [machineRoot '/ERA5Land/reanalysis-era5-land-timeseries/'];
